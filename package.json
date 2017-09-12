@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/gnujim/github-avatar-downloader#readme",
   "dependencies": {
+    "express-useragent": "^1.0.7",
+    "node-fetch": "^1.7.3",
     "request": "^2.81.0"
   }
 }
