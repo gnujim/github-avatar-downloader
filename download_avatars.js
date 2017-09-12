@@ -18,6 +18,10 @@ const getRepoContributors = (repoOwner, repoName, cb) => {
       return;
     }
     const data = JSON.parse(body);
+    if (data.message) {
+      cb(data);
+      return;
+    }
     cb(undefined, data);
   });
 };
@@ -31,15 +35,23 @@ const downloadImageByURL = (url, filePath) => {
     .pipe(fs.createWriteStream(filePath));
 };
 
-getRepoContributors('jquery', 'jquery', (err, result) => {
-  if (err) {
-    console.log(err);
-    // throw err;
-    return;
-  }
-  result.forEach(user => {
-    let avatarURL = user.avatar_url;
-    let path = `avatars/${user.login}.jpg`;
-    downloadImageByURL(avatarURL, path);
+//step 10 - make them required arguments --here--
+const arg1 = process.argv[2];
+const arg2 = process.argv[3];
+
+if (arg1 && arg2) {
+  getRepoContributors(process.argv[2], process.argv[3], (err, result) => {
+    if (err) {
+      console.log(err);
+      // throw err;
+      return;
+    }
+    result.forEach(user => {
+      let avatarURL = user.avatar_url;
+      let path = `avatars/${user.login}.jpg`;
+      downloadImageByURL(avatarURL, path);
+    });
   });
-});
+} else {
+  console.log('Please enter BOTH owner and repo.');
+}
