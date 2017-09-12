@@ -14,27 +14,29 @@ const getRepoContributors = (repoOwner, repoName, cb) => {
   };
   request(options, (error, response, body) => {
     if (error) {
-      console.log(error);
+      cb(error);
       return;
     }
     const data = JSON.parse(body);
-    // console.log(data);
-    cb(error, data);
+    cb(undefined, data);
   });
 };
 
 const downloadImageByURL = (url, filePath) => {
   request
     .get(url)
-    // .on('error', err => {
-    //   throw err;
-    // })
+    .on('error', err => {
+      throw err;
+    })
     .pipe(fs.createWriteStream(filePath));
 };
 
 getRepoContributors('jquery', 'jquery', (err, result) => {
-  // console.log(`Errors: ${err}`);
-  // console.log(`Result: ${result}`);
+  if (err) {
+    console.log(err);
+    // throw err;
+    return;
+  }
   result.forEach(user => {
     let avatarURL = user.avatar_url;
     let path = `avatars/${user.login}.jpg`;
