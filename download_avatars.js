@@ -12,27 +12,16 @@ const getRepoContributors = (repoOwner, repoName, cb) => {
       'User-Agent': 'GitHub Avatar Downloader - Student Project'
     }
   };
-  request
-    .get(options, data => {
-      fetch(options.url)
-        .then(res => {
-          return res.json();
-        })
-        .then(json => {
-          console.log(json);
-        });
-    })
-    .on('error', err => {
-      throw err;
-    })
-    .on('response', response => {
-      console.log(
-        `Response Status Message: ${response.statusCode} ${response.statusMessage}`
-      );
-    });
+  request(options, (error, response, body) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    const data = JSON.parse(body);
+    console.log(data);
+  });
 };
 
 getRepoContributors('jquery', 'jquery', (err, result) => {
   console.log(`Errors: ${err}`);
-  console.log(`Results: ${result}`);
 });
